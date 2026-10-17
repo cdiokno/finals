@@ -1,5 +1,6 @@
 <script setup>
 import { programs, stories } from '../data/college'
+import { libraryPhotos } from '../data/programMedia'
 </script>
 <template>
   <section class="container page-intro">
@@ -84,9 +85,24 @@ import { programs, stories } from '../data/college'
       </li>
     </ul>
     <h2>Design and development</h2>
+    <h3>Program showcase media</h3>
+    <ul>
+      <li v-for="photo in libraryPhotos" :key="photo.file">
+        <a :href="photo.source" target="_blank" rel="noopener noreferrer">{{ photo.title }}</a>
+        — {{ photo.author }},
+        <a :href="`https://creativecommons.org/licenses/by-sa/${photo.license.endsWith('3.0') ? '3.0' : '4.0'}/`" target="_blank" rel="noopener noreferrer">{{ photo.license }}</a>.
+        Resized, compressed, and cropped in the Drift Wall; adaptations retain the same license.
+      </li>
+    </ul>
+    <p>
+      The DMIA character is RobotExpressive by Tomás Laulhé (Quaternius), modified by Don McCurdy,
+      from the <a href="https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf/RobotExpressive" target="_blank" rel="noopener noreferrer">three.js sample assets</a>,
+      released under <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener noreferrer">CC0 1.0</a>.
+      Its poster is rendered from the same model. It is an illustration of digital character art, not CPU student work.
+    </p>
     <p>
       Built with Vue 3 and Vue Router. Folder Float, Scroll Expand, Text Loop, Chroma Grid, Logo
-      Loop, Scroll Reveal, and Sticker Peel are adapted from
+      Loop, Scroll Reveal, Sticker Peel, Card Swap, Letter Glitch, Cubes, Model Viewer, and Drift Wall are adapted from
       <a href="https://vue-bits.dev/" target="_blank" rel="noopener noreferrer">Vue Bits</a>. Icons
       are from Lucide. Typography uses Manrope and Space Grotesk, under the SIL Open Font License.
       Custom program illustrations and the hello-future sticker were created for this project.

@@ -19,7 +19,7 @@ const currentId = ref('home')
 const current = computed(
   () => sections.find((section) => section.id === currentId.value) || sections[0],
 )
-const progress = ref(0)
+const hasScrolled = ref(false)
 const mobileOpen = ref(false)
 const menuButton = ref(null)
 const header = ref(null)
@@ -38,9 +38,7 @@ function measureHighlight() {
 }
 function updateScroll() {
   frame = 0
-  const available = document.documentElement.scrollHeight - window.innerHeight
-  progress.value =
-    available > 0 ? Math.round(Math.min(1, Math.max(0, window.scrollY / available)) * 100) : 0
+  hasScrolled.value = window.scrollY > 0
   const readingLine = Math.min(220, Math.max(120, window.innerHeight * 0.25))
   let active = 'home'
   for (const element of elements) {
@@ -111,7 +109,7 @@ onUnmounted(() => {
   <header
     ref="header"
     class="island-header"
-    :class="{ 'is-expanded': mobileOpen, 'has-scrolled': progress > 0 }"
+    :class="{ 'is-expanded': mobileOpen, 'has-scrolled': hasScrolled }"
     :data-current-section="currentId"
   >
     <div class="island-top">
@@ -150,28 +148,6 @@ onUnmounted(() => {
       <div class="island-now" aria-label="Current section">
         <span class="island-live-dot"></span>
         <span>{{ current.label }}</span>
-      </div>
-      <div
-        class="island-progress"
-        role="progressbar"
-        aria-label="Page reading progress"
-        :aria-valuenow="progress"
-        aria-valuemin="0"
-        aria-valuemax="100"
-      >
-        <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
-          <circle class="progress-ring-track" cx="15" cy="15" r="12" />
-          <circle
-            class="progress-ring-value"
-            cx="15"
-            cy="15"
-            r="12"
-            pathLength="100"
-            :stroke-dasharray="`${progress} 100`"
-          />
-          <path d="m11.5 14.5 3.5 3.5 3.5-3.5m-3.5-4v8" />
-        </svg>
-        <span>{{ progress }}<small>%</small></span>
       </div>
       <button
         ref="menuButton"

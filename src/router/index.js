@@ -34,6 +34,25 @@ const router = createRouter({
     if (to.path === from.path && to.hash === from.hash && to.fullPath !== from.fullPath) return false
     if (to.hash) {
       await nextTick()
+      // A fresh deep link can arrive before the async homepage and its pinned intro mount.
+      if (!document.getElementById(to.hash.slice(1))) {
+        await new Promise((resolve) => {
+          const observer = new MutationObserver(() => {
+            if (document.getElementById(to.hash.slice(1))) finish()
+          })
+          const timeout = setTimeout(finish, 1500)
+          function finish() { observer.disconnect(); clearTimeout(timeout); resolve() }
+          observer.observe(document.getElementById('main-content'), { childList: true, subtree: true })
+        })
+      }
+      await document.fonts.ready
+      await nextTick()
+      // Font metrics can change whether the intro fits; let its resize observer settle first.
+      await new Promise((resolve) => {
+        // Background tabs can suspend animation frames; navigation must still finish.
+        const timeout = setTimeout(resolve, 100)
+        requestAnimationFrame(() => requestAnimationFrame(() => { clearTimeout(timeout); resolve() }))
+      })
       const target = document.getElementById(to.hash.slice(1))
       if (target) {
         // Deep links open their inline program, article, or credits before scrolling.

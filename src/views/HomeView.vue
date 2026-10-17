@@ -1,169 +1,40 @@
 <script setup>
 import { inject, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import Icon from '../components/Icon.vue'
-import ProgramCard from '../components/ProgramCard.vue'
+import ProgramIntro from '../components/ProgramIntro.vue'
+import ProgramHero from '../components/ProgramHero.vue'
 import ProgramDetail from '../components/ProgramDetail.vue'
 import AboutView from './AboutView.vue'
 import FacultyView from './FacultyView.vue'
 import NewsView from './NewsView.vue'
 import ContactView from './ContactView.vue'
 import CreditsView from './CreditsView.vue'
-import FolderFloat from '../components/vue-bits/FolderFloat.vue'
 import ScrollExpand from '../components/vue-bits/ScrollExpand.vue'
 import TextLoop from '../components/vue-bits/TextLoop.vue'
 import LogoLoop from '../components/vue-bits/LogoLoop.vue'
 import ScrollReveal from '../components/vue-bits/ScrollReveal.vue'
-import StickerPeel from '../components/vue-bits/StickerPeel.vue'
 import { programs, imagePath } from '../data/college'
-const router = useRouter()
 const motionPaused = inject('motionPaused')
-const folderItems = programs.map((p) => ({ label: p.code, value: `/programs/${p.id}` }))
+const orderedPrograms = ['bscs', 'bsit', 'bsdmia', 'blis'].map(id => programs.find(p => p.id === id))
 const logos = computed(() =>
-  programs.map((p) => ({ src: imagePath(p.logo), alt: p.org, title: p.org, code: p.code })),
+  orderedPrograms.map((p) => ({ src: imagePath(p.logo), alt: p.org, title: p.org, code: p.code })),
 )
 </script>
 <template>
-  <section id="home" data-scroll-section class="hero-section">
-    <div class="container hero-grid">
-      <div class="hero-copy">
-        <div class="location-label">
-          <span class="live-dot"></span> Iloilo roots. Limitless possibilities.
-        </div>
-        <h1>
-          Think big.<br />Build
-          <span class="hero-word"
-            >what’s next.<svg viewBox="0 0 550 30" aria-hidden="true">
-              <path d="M4 19Q260-7 541 10M27 28Q300 9 519 19" /></svg
-          ></span>
-        </h1>
-        <p>
-          A home for curious minds, creative thinkers, and future builders. Find your place at CPU’s
-          College of Computer Studies.
-        </p>
-        <div class="hero-actions">
-          <RouterLink to="/programs" class="button button-navy"
-            >Find your program <Icon name="arrow-up-right" /></RouterLink
-          ><RouterLink to="/about" class="text-link"
-            >Get to know CCS <Icon name="arrow-right" :size="18"
-          /></RouterLink>
-        </div>
-        <div class="hero-community">
-          <div class="community-logos">
-            <img
-              v-for="p in programs"
-              :key="p.id"
-              :src="imagePath(p.logo)"
-              alt=""
-              width="39"
-              height="39"
-            />
-          </div>
-          <span>Different passions.<br /><strong>One Centralian community.</strong></span>
-        </div>
-      </div>
-      <div class="hero-collage">
-        <div class="collage-grid" aria-hidden="true"></div>
-        <div class="hero-code" aria-label="A playful code illustration: your future starts here">
-          <div class="code-bar">
-            <span><i></i><i></i><i></i></span><span>your_future.js</span
-            ><Icon name="code" :size="14" />
-          </div>
-          <div class="code-body">
-            <span class="line-number">01</span><span><em>const</em> future = {</span
-            ><span class="line-number">02</span><span>&nbsp; curiosity: <b>"unlimited"</b>,</span
-            ><span class="line-number">03</span><span>&nbsp; possibilities: <b>Infinity</b></span
-            ><span class="line-number">04</span><span>};<i class="terminal-caret"></i></span>
-          </div>
-        </div>
-        <div class="campus-postcard">
-          <img
-            :src="imagePath('campus.jpg')"
-            alt="The green courtyard of Mary Thomas Hall, home of CPU’s College of Computer Studies"
-            fetchpriority="high"
-          />
-          <div class="postcard-caption">
-            <span><Icon name="pin" :size="15" /> Your ideas have a home here.</span
-            ><span>CPU, Iloilo</span>
-          </div>
-        </div>
-        <div class="hero-sticker" aria-hidden="true">
-          <StickerPeel
-            v-if="!motionPaused"
-            :image-src="imagePath('hello-sticker.svg')"
-            :width="145"
-            :rotate="12"
-            :peel-back-hover-pct="22"
-            :initial-position="{ x: 0, y: 0 }"
-          /><img v-else :src="imagePath('hello-sticker.svg')" alt="" width="145" />
-        </div>
-        <div class="hero-folder">
-          <FolderFloat
-            :items="folderItems"
-            label="Your next chapter"
-            sublabel="4 paths to explore"
-            folder-color="#5763a8"
-            front-color="#a8b5ed"
-            label-color="#182850"
-            paper-color="#fffdf6"
-            item-color="#fffdf6"
-            item-text-color="#182850"
-            :width="184"
-            :height="128"
-            :spread="125"
-            :lift="25"
-            :physics="!motionPaused"
-            @select="router.push"
-          /><span class="folder-hint"
-            >open a little possibility
-            <svg width="47" height="29" viewBox="0 0 47 29" aria-hidden="true">
-              <path d="M2 25Q38 29 38 4m-7 5 8-7 6 9" /></svg
-          ></span>
-        </div>
-        <div class="floating-tag"><span>✳</span> Made of curiosity.</div>
-      </div>
-    </div>
-    <div class="container hero-bottom">
-      <span>Technology. Creativity. A little courage.</span
-      ><RouterLink :to="{ path: '/', hash: '#programs' }"
-        >Your next chapter, this way <Icon name="arrow-down" :size="15"
-      /></RouterLink>
-    </div>
-  </section>
+  <ProgramIntro :programs="orderedPrograms" />
 
-  <section id="programs" data-scroll-section class="section container">
-    <div class="section-heading">
-      <div>
-        <span class="section-kicker"><span></span> Find your direction</span>
-        <h2>Four paths.<br />A world of possibilities.</h2>
-      </div>
-      <div class="section-heading-aside">
-        <p>Whether you think in code, color, systems, or stories, there’s a place for you here.</p>
-        <RouterLink to="/programs" class="text-link"
-          >Explore all programs <Icon name="arrow-up-right" :size="18"
-        /></RouterLink>
-      </div>
-    </div>
-    <div class="program-grid"><ProgramCard v-for="p in programs" :key="p.id" :program="p" /></div>
-    <div class="program-accordions">
-      <details v-for="p in programs" :id="`program-${p.id}`" :key="p.id" class="program-accordion">
-        <summary>
-          <span class="program-accordion-icon" :class="p.theme"
-            ><Icon :name="p.icon" :size="22" /></span
-          ><span class="program-accordion-heading"
-            ><span>{{ p.code }}</span>
-            <h3>{{ p.name }}</h3></span
-          ><span class="program-accordion-hint">A closer look</span
-          ><span class="program-accordion-toggle"><Icon name="plus" :size="20" /></span>
-        </summary>
-        <ProgramDetail :id="p.id" />
-      </details>
-    </div>
-    <div class="program-helper">
-      <Icon name="sparkles" :size="18" /><span>Still exploring? That’s a great place to start.</span
-      ><RouterLink to="/contact"
-        >Let’s find your fit <Icon name="arrow-right" :size="16"
-      /></RouterLink>
+  <section id="programs" data-scroll-section class="program-journey" aria-label="Our four degree programs">
+    <nav class="container program-chapter-nav" aria-label="Explore degree programs">
+      <span>Four paths. Find yours.</span>
+      <RouterLink v-for="p in orderedPrograms" :key="p.id" :to="`/programs/${p.id}`">{{ p.code }} <Icon name="arrow-up-right" :size="14" /></RouterLink>
+    </nav>
+    <article v-for="p in orderedPrograms" :id="`program-${p.id}`" :key="p.id" class="program-chapter" :aria-label="p.name">
+      <ProgramHero :program="p" />
+      <div :id="`program-${p.id}-details`" class="container chapter-info"><ProgramDetail :id="p.id" /></div>
+    </article>
+    <div class="container program-helper">
+      <Icon name="sparkles" :size="18" /><span>Still exploring? That’s a great place to start.</span>
+      <RouterLink to="/contact">Let’s find your fit <Icon name="arrow-right" :size="16" /></RouterLink>
     </div>
   </section>
 

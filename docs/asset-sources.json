@@ -7,5 +7,11 @@
   "org-cs.png": "https://ccs.cpu.edu.ph/wp-content/uploads/2021/11/CSS_PNG-150x150.png",
   "org-it.png": "https://ccs.cpu.edu.ph/wp-content/uploads/2021/11/1-150x150.png",
   "org-dmia.png": "https://ccs.cpu.edu.ph/wp-content/uploads/2021/11/MIDAS_PNG-150x150.png",
-  "org-lis.png": "https://ccs.cpu.edu.ph/wp-content/uploads/2021/11/LISSO-150x150.png"
+  "org-lis.png": "https://ccs.cpu.edu.ph/wp-content/uploads/2021/11/LISSO-150x150.png",
+  "cpu-library-2025.jpg": "https://upload.wikimedia.org/wikipedia/commons/7/73/Henry_Luce_III_Library_-_Central_Philippine_University.jpg",
+  "cpu-library-courtyard.jpg": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Henry_Luce_III_Library_at_Central_Philippine_University.jpg",
+  "cpu-library-2018.jpg": "https://upload.wikimedia.org/wikipedia/commons/e/ee/Henry_Luce_III_Library.jpg",
+  "cpu-library-2013.jpg": "https://upload.wikimedia.org/wikipedia/commons/0/01/CPU_Library_Henry_Luce_III_Library.JPG",
+  "robot-expressive.glb": "https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/RobotExpressive/RobotExpressive.glb",
+  "dmia-robot-poster.png": "Rendered locally from the CC0 RobotExpressive model (Tom\u00e1s Laulh\u00e9 / Don McCurdy)"
 }

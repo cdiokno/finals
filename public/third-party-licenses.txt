@@ -2,7 +2,7 @@
 
 ## Vue Bits
 
-FolderFloat, ScrollExpand, TextLoop, ChromaGrid, LogoLoop, ScrollReveal, and StickerPeel originate from https://vue-bits.dev/ and https://github.com/DavidHDev/vue-bits (David Haz, 2025).
+FolderFloat, ScrollExpand, TextLoop, ChromaGrid, LogoLoop, ScrollReveal, StickerPeel, CardSwap, LetterGlitch, Cubes, ModelViewer, and DriftWall originate from https://vue-bits.dev/ and https://github.com/DavidHDev/vue-bits (David Haz, 2025).
 
 The full MIT + Commons Clause notice is preserved in `src/components/vue-bits/LICENSE.md`. Components are included as part of this educational website, not redistributed as a component product. Adaptations include the project’s palette and layout, accessible faculty profile buttons, empty-data handling, GSAP cleanup, semantic Scroll Reveal markup, and project motion controls.
 
@@ -161,6 +161,100 @@ airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circl
 The MIT License (MIT) (for the icons listed above)
 
 Copyright (c) 2013-present Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+## Program showcase photography
+
+All four images are Henry Luce III Library at Central Philippine University, via Wikimedia Commons.
+- cpu-library-2025.jpg: Johngaje92, CC BY-SA 4.0. https://commons.wikimedia.org/wiki/File:Henry_Luce_III_Library_-_Central_Philippine_University.jpg
+- cpu-library-courtyard.jpg: Johngaje92, CC BY-SA 4.0. https://commons.wikimedia.org/wiki/File:Henry_Luce_III_Library_at_Central_Philippine_University.jpg
+- cpu-library-2018.jpg: Americana22ount, CC BY-SA 4.0. https://commons.wikimedia.org/wiki/File:Henry_Luce_III_Library.jpg
+- cpu-library-2013.jpg: Ryn910, CC BY-SA 3.0. https://commons.wikimedia.org/wiki/File:CPU_Library_Henry_Luce_III_Library.JPG
+Images were resized and compressed and are cropped responsively in the wall. Each adaptation retains its original license.
+CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
+CC BY-SA 3.0: https://creativecommons.org/licenses/by-sa/3.0/
+
+## RobotExpressive
+
+Model by Tomás Laulhé (Quaternius), modified by Don McCurdy. CC0 1.0.
+Source: https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf/RobotExpressive
+The poster is rendered from the same CC0 model.
+License: https://creativecommons.org/publicdomain/zero/1.0/
+
+
+--- three ---
+
+The MIT License
+
+Copyright © 2010-2025 three.js authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+--- @tresjs/core ---
+
+MIT License
+
+Copyright (c) 2022-present, (alvarosabu) Alvaro Saburido and Tres contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+--- @tresjs/cientos ---
+
+MIT License
+
+Copyright (c) 2022-present, (alvarosabu) Alvaro Saburido and Tres contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,5 +1,4 @@
-async function checkCollege(page) {
-  const base = 'http://127.0.0.1:5173/#/'
+async function checkCollege(page, base = new URL('/#/', page.url()).href) {
   const failures = []
   const errors = []
   const check = (value, label) => { if (!value) failures.push(label) }
@@ -11,11 +10,44 @@ async function checkCollege(page) {
   check(await page.locator('main h1').count() === 1, 'One page has one primary heading')
   check(await page.locator('[data-scroll-section]').count() === 6, 'All six primary sections are on the homepage')
   check(await page.locator('.university-bar').count() === 0, 'Blue university strip is removed')
-  check(await page.locator('.program-accordion').count() === 4, 'All four full program details are inline')
+  check(await page.locator('.program-chapter').count() === 4, 'All four open program chapters are inline')
+  check((await page.locator('.program-chapter').evaluateAll(nodes => nodes.map(n => n.id))).join(',') === 'program-bscs,program-bsit,program-bsdmia,program-blis', 'Program order is CS, IT, DMIA, BLIS')
   check(await page.locator('.inline-story').count() === 3, 'All three full stories are inline')
   check(await page.locator('.faculty-card').count() === 17, 'All grouped faculty are on the homepage')
   check(await page.locator('#contact form').count() === 1, 'Contact form is on the homepage')
   check(await page.locator('.island-header').evaluate(el => getComputedStyle(el).position) === 'fixed', 'Island stays fixed')
+
+  const jump = (id) => page.evaluate(id => {
+    const el = document.getElementById(id)
+    window.scrollTo({ top: scrollY + el.getBoundingClientRect().top - 110, behavior: 'instant' })
+  }, id)
+  await page.evaluate(() => document.fonts.ready)
+  await page.waitForFunction(() => document.querySelector('#home').dataset.pinned === 'true')
+  for (const [position, count] of [[0, 4], [510, 3], [1010, 2], [1510, 1], [2000, 0], [1010, 2], [0, 4]]) {
+    await page.evaluate(top => window.scrollTo({ top, behavior: 'instant' }), position)
+    await page.waitForFunction(expected => Number(document.querySelector('[data-card-count]').textContent) === expected, count)
+    check(await page.locator('.deck-card:not([inert])').count() === (count ? 1 : 0), `Only the front card is interactive at count ${count}`)
+  }
+  await page.evaluate(() => window.scrollTo({ top: 2100, behavior: 'instant' }))
+  await page.waitForFunction(() => document.querySelector('#home').getBoundingClientRect().top < 0)
+  check(await page.locator('#home').evaluate(e => e.getBoundingClientRect().top) < 0, 'Pin releases after the fourth card')
+  await jump('program-bscs')
+  await page.waitForFunction(() => !!document.querySelector('.chapter-glitch canvas'))
+  await jump('program-bsit')
+  await page.waitForFunction(() => document.querySelectorAll('.chapter-cubes .cube').length === 49)
+  await jump('program-bsdmia')
+  await page.waitForFunction(() => document.querySelector('.chapter-model').dataset.modelState === 'loaded')
+  const modelCanvas = page.locator('.dmia-viewer canvas')
+  const modelRect = await modelCanvas.boundingBox()
+  await page.mouse.move(modelRect.x + modelRect.width / 2, modelRect.y + modelRect.height / 2)
+  const beforeWheel = await page.evaluate(() => scrollY)
+  await page.mouse.wheel(0, 180)
+  await page.waitForFunction(y => scrollY > y, beforeWheel)
+  check(true, 'Wheel over model scrolls the document')
+  await jump('program-blis')
+  await page.waitForFunction(() => !!document.querySelector('.chapter-wall [data-tile-id]'))
+  check(await page.locator('.chapter-wall').evaluate(e => e.inert), 'Decorative wall is outside the tab order')
+  await page.waitForFunction(() => !document.querySelector('.dmia-viewer canvas'))
 
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 })
@@ -29,7 +61,7 @@ async function checkCollege(page) {
         window.scrollTo({ top: window.scrollY + element.getBoundingClientRect().top - 110, behavior: 'instant' })
       }, id)
       await page.waitForFunction(id => document.querySelector('.island-header').dataset.currentSection === id, id)
-      check(await page.getByRole('progressbar', { name: 'Page reading progress' }).getAttribute('aria-valuenow') !== null, `Progress available in ${id} at ${width}`)
+      check(await page.locator('.island-header').getAttribute('data-current-section') === id, `Current section tracks ${id} at ${width}`)
     }
   }
 
@@ -38,9 +70,9 @@ async function checkCollege(page) {
   await nav.getByRole('link', { name: 'Programs', exact: true }).click()
   await page.waitForFunction(() => document.querySelector('.island-header').dataset.currentSection === 'programs')
   check(page.url().includes('#/#programs'), 'Island link navigates within the homepage')
-  await page.locator('.program-card').first().click()
-  await page.waitForFunction(() => document.querySelector('#program-bsit').open)
-  check(await page.locator('#program-bsit').getByText('Bachelor of Science in Information Technology', { exact: true }).isVisible(), 'Program card opens complete inline degree information')
+  await page.locator('.program-chapter-nav').getByRole('link', { name: 'BSIT', exact: true }).click()
+  await page.waitForFunction(() => Math.abs(document.querySelector('#program-bsit').getBoundingClientRect().top - 110) < 5)
+  check(await page.locator('#program-bsit').getByText('Bachelor of Science in Information Technology', { exact: true }).first().isVisible(), 'Program link opens complete inline degree information')
   await page.locator('#program-bsit').getByRole('link', { name: 'Ask about BSIT' }).click()
   await page.waitForFunction(() => document.querySelector('.island-header').dataset.currentSection === 'contact')
   check(await page.locator('#topic').inputValue() === 'BSIT', 'Inline program inquiry preselects the contact topic')
@@ -78,14 +110,14 @@ async function checkCollege(page) {
   check(await page.locator('.island-now').innerText() === 'About', 'Mobile island names the current section')
   check(await page.getByRole('button', { name: 'Open navigation' }).getAttribute('aria-expanded') === 'false', 'Mobile menu closes after jumping')
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }))
-  await page.waitForFunction(() => document.querySelector('[role=progressbar]').getAttribute('aria-valuenow') === '100')
+  check(await page.locator('.island-header').getAttribute('data-current-section') === 'contact', 'Current header stays on Contact at document end')
   await page.getByRole('button', { name: 'Pause motion' }).click()
   check(await page.getByRole('button', { name: 'Enable motion' }).isVisible(), 'Motion toggle works on the unified homepage')
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto(base + '#program-blis')
-  await page.waitForFunction(() => document.querySelector('#program-blis')?.open)
-  check(await page.locator('#program-blis').getByText('Bachelor of Library and Information Science', { exact: true }).isVisible(), 'Direct anchor opens its full program')
-  await page.goto('http://127.0.0.1:5173/#/about')
+  await page.waitForFunction(() => Math.abs(document.querySelector('#program-blis').getBoundingClientRect().top - 110) < 5)
+  check(await page.locator('#program-blis').getByText('Bachelor of Library and Information Science', { exact: true }).first().isVisible(), 'Direct anchor reaches its full program')
+  await page.goto(base + 'about')
   await page.waitForFunction(() => document.querySelector('.island-header').dataset.currentSection === 'about')
   check(page.url().endsWith('/#about'), 'Legacy page links redirect to their homepage section')
   await page.emulateMedia({ reducedMotion: 'no-preference' })
@@ -93,5 +125,5 @@ async function checkCollege(page) {
   await page.reload()
   check(!errors.length, `No browser errors: ${errors.join('; ')}`)
   if (failures.length) throw new Error(failures.join('\n'))
-  return { sections: 6, inlinePrograms: 4, inlineStories: 3, viewports: [1440, 768, 390, 320], failures, browserErrors: errors }
+  return { sections: 6, openPrograms: 4, inlineStories: 3, viewports: [1440, 768, 390, 320], failures, browserErrors: errors }
 }
