@@ -1,7 +1,8 @@
 <!-- Adapted from Vue Bits: https://vue-bits.dev; see THIRD_PARTY_NOTICES.md. -->
 <script setup lang="ts">
-import { onMounted, onUnmounted, computed, useTemplateRef, shallowRef, reactive } from 'vue'
+import { onMounted, onUnmounted, computed, useTemplateRef, shallowRef, reactive, watch } from 'vue'
 import gsap from 'gsap'
+import { useMotionPaused } from '../../composables/useMotionPreference'
 
 interface CardItem {
   image?: string
@@ -39,6 +40,15 @@ const fadeRef = useTemplateRef<HTMLElement>('fadeRef')
 const setX = shallowRef<(value: number | string) => void>()
 const setY = shallowRef<(value: number | string) => void>()
 const pos = reactive({ x: 0, y: 0 })
+const motionPaused = useMotionPaused()
+watch(motionPaused, (paused) => {
+  if (!paused) return
+  gsap.killTweensOf(pos)
+  if (fadeRef.value) {
+    gsap.killTweensOf(fadeRef.value)
+    fadeRef.value.style.opacity = '1'
+  }
+})
 
 const data = computed(() => props.items)
 const emit = defineEmits<{ select: [index: number] }>()
@@ -75,6 +85,7 @@ const moveTo = (x: number, y: number) => {
 }
 
 const handleMove = (e: PointerEvent) => {
+  if (motionPaused.value) return
   const r = rootRef.value?.getBoundingClientRect()
   if (!r) return
   moveTo(e.clientX - r.left, e.clientY - r.top)
@@ -84,6 +95,7 @@ const handleMove = (e: PointerEvent) => {
 }
 
 const handleLeave = () => {
+  if (motionPaused.value) return
   if (fadeRef.value) {
     gsap.to(fadeRef.value, {
       opacity: 1,
@@ -98,6 +110,7 @@ const handleCardClick = (url?: string) => {
 }
 
 const handleCardMove = (e: MouseEvent) => {
+  if (motionPaused.value) return
   const c = e.currentTarget as HTMLElement
   const rect = c.getBoundingClientRect()
   const x = e.clientX - rect.left

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch, type CSSProperties, type ComponentPublicInstance } from 'vue';
+import { useMotionPaused } from '../../composables/useMotionPreference';
 
 export interface DriftWallItem {
   image: string;
@@ -50,9 +51,6 @@ interface RenderColumn {
 
 const cx = (...parts: (string | false | undefined)[]): string => parts.filter(Boolean).join(' ');
 
-const prefersReducedMotion = (): boolean =>
-  typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 const columnFactor = (index: number, variance: number): number => {
   const pseudo = ((index * 0.6180339887 + 0.35) % 1) * 2 - 1;
   return 1 + variance * pseudo;
@@ -101,7 +99,7 @@ const setTrackRef = (el: Element | ComponentPublicInstance | null, index: number
 
 const containerHeight = ref(600);
 const activeId = ref<string | null>(null);
-const reduced = ref(false);
+const reduced = useMotionPaused();
 
 let offsets: number[] = [];
 let velocities: number[] = [];
@@ -245,20 +243,9 @@ const handlePointerLeaveWall = () => {
   release();
 };
 
-let mq: MediaQueryList | null = null;
-let onReducedChange: ((e: MediaQueryListEvent) => void) | null = null;
 let ro: ResizeObserver | null = null;
 
 onMounted(() => {
-  reduced.value = prefersReducedMotion();
-  if (typeof window !== 'undefined') {
-    mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    onReducedChange = e => {
-      reduced.value = e.matches;
-    };
-    mq.addEventListener('change', onReducedChange);
-  }
-
   const el = containerRef.value;
   if (el) {
     ro = new ResizeObserver(([entry]) => {
@@ -275,7 +262,6 @@ onUnmounted(() => {
   raf = null;
   lastTs = null;
   ro?.disconnect();
-  if (mq && onReducedChange) mq.removeEventListener('change', onReducedChange);
 });
 
 const maskStyle =

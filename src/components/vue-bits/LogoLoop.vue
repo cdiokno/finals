@@ -51,7 +51,6 @@
       ref="trackRef"
       :class="[
         'flex will-change-transform select-none relative z-0',
-        'motion-reduce:transform-none',
         isVertical ? 'flex-col h-max w-full' : 'flex-row w-max',
       ]"
       @mouseenter="handleMouseEnter"
@@ -111,6 +110,7 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch, type CSSProperties } from 'vue'
+import { useMotionPaused } from '../../composables/useMotionPreference'
 
 export type LogoItemNode = {
   node: string
@@ -169,6 +169,7 @@ const props = withDefaults(defineProps<LogoLoopProps>(), {
 })
 
 const containerRef = ref<HTMLDivElement | null>(null)
+const motionPaused = useMotionPaused()
 const trackRef = ref<HTMLDivElement | null>(null)
 const seqRef = ref<HTMLUListElement | null>(null)
 
@@ -331,8 +332,7 @@ const startAnimationLoop = () => {
   const track = trackRef.value
   if (!track) return () => {}
 
-  const prefersReduced =
-    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  const prefersReduced = motionPaused.value
 
   const seqSize = isVertical.value ? seqHeight.value : seqWidth.value
 
@@ -426,7 +426,7 @@ watch(
 )
 
 watch(
-  [() => props.speed, () => props.direction, () => props.hoverSpeed, () => props.pauseOnHover],
+  [() => props.speed, () => props.direction, () => props.hoverSpeed, () => props.pauseOnHover, motionPaused],
   () => {
     cleanupAnimation?.()
     cleanupAnimation = startAnimationLoop()
@@ -461,7 +461,6 @@ const LogoContent = defineComponent({
         return h('span', {
           class: [
             'inline-flex items-center',
-            'motion-reduce:transition-none',
             scaleClass,
             'text-[length:var(--logoloop-logoHeight)] [&>i]:text-[length:var(--logoloop-logoHeight)] [&>i]:leading-[1]',
           ]
@@ -480,7 +479,6 @@ const LogoContent = defineComponent({
           'h-[var(--logoloop-logoHeight)] w-auto block object-contain',
           '[-webkit-user-drag:none] pointer-events-none',
           '[image-rendering:-webkit-optimize-contrast]',
-          'motion-reduce:transition-none',
           scaleClass,
         ]
           .filter(Boolean)

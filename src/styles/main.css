@@ -2002,6 +2002,7 @@ button:disabled {
   margin: 20px 0 25px;
 }
 /* Accessible motion and small screens */
+.motion-paused,
 .motion-paused *,
 .motion-paused *::before,
 .motion-paused *::after {
@@ -2012,20 +2013,7 @@ button:disabled {
 .motion-paused .chroma-overlay {
   display: none;
 }
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation: none !important;
-    transition: none !important;
-  }
-  .chroma-overlay {
-    display: none;
-  }
-}
+/* App.vue applies motion-paused from the OS default or the visitor's saved choice. */
 @media (hover: none) {
   .chroma-overlay {
     display: none;
