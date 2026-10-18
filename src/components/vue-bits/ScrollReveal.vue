@@ -16,6 +16,7 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { computed, nextTick, onMounted, onUnmounted, useSlots, useTemplateRef, type Ref } from 'vue'
+import { useMotionPaused } from '../../composables/useMotionPreference'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -44,6 +45,7 @@ const props = withDefaults(defineProps<ScrollRevealProps>(), {
 })
 
 const slots = useSlots()
+const motionPaused = useMotionPaused()
 const containerRef = useTemplateRef<HTMLHeadingElement>('containerRef')
 
 const text = computed<string>(() => {
@@ -79,7 +81,7 @@ onMounted(async () => {
   await nextTick()
 
   const el = containerRef.value
-  if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+  if (!el || motionPaused.value) return
 
   const scroller = resolveScroller(props.scrollContainerRef)
   const wordElements = el.querySelectorAll<HTMLElement>('.scroll-reveal-word')

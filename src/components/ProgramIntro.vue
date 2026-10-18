@@ -17,7 +17,13 @@ const remaining = computed(() => Math.max(0, 4 - Math.floor(progress.value * 4 +
 let trigger
 let observer
 let frame
+let refreshFrame
 let disposed = false
+
+function refreshScrollEffects() {
+  cancelAnimationFrame(refreshFrame)
+  refreshFrame = requestAnimationFrame(() => ScrollTrigger.refresh())
+}
 
 function setup() {
   if (!hero.value) return
@@ -31,10 +37,12 @@ function setup() {
   const canPin = !motionPaused.value && contentsHeight <= window.innerHeight + 2
   if (trigger && canPin) { trigger.refresh(); return }
   if (!canPin) {
+    const wasPinned = !!trigger
     trigger?.kill(true)
     trigger = null
     pinned.value = false
     progress.value = 0
+    if (wasPinned) refreshScrollEffects()
     return
   }
   // Short viewports use ordinary page scrolling so the headline and links stay reachable.
@@ -48,6 +56,7 @@ function setup() {
     onUpdate: (self) => { progress.value = self.progress },
   })
   pinned.value = true
+  refreshScrollEffects()
 }
 
 function scheduleSetup() {
@@ -67,6 +76,7 @@ watch(motionPaused, () => { if (!disposed) setup() }, { flush: 'post' })
 onUnmounted(() => {
   disposed = true
   cancelAnimationFrame(frame)
+  cancelAnimationFrame(refreshFrame)
   observer?.disconnect()
   window.removeEventListener('resize', scheduleSetup)
   trigger?.kill(true)

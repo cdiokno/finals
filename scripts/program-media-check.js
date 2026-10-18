@@ -14,6 +14,7 @@ async function checkProgramMedia(page, base = new URL('/#/', page.url()).href) {
   await page.emulateMedia({ reducedMotion: 'no-preference' })
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.goto(base)
+  await page.evaluate(() => localStorage.removeItem('ccs-motion-paused'))
   await page.reload()
   await page.waitForFunction(() => document.querySelector('#home')?.dataset.pinned === 'true').catch(() => { throw new Error('Initial desktop intro did not pin') })
   for (const width of [1440, 768, 390, 320]) {

@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import { gsap } from 'gsap'
 import { computed, onMounted, onUnmounted, ref, watch, type CSSProperties } from 'vue'
+import { useMotionPaused } from '../../composables/useMotionPreference'
 
 export type TextLoopShape = 'wave' | 'circle' | 'infinity' | 'arch' | 'line'
 export type TextLoopDirection = 'forward' | 'reverse'
@@ -93,6 +94,7 @@ const props = withDefaults(defineProps<TextLoopProps>(), {
 })
 
 const rootRef = ref<HTMLDivElement | null>(null)
+const motionPaused = useMotionPaused()
 const pathRef = ref<SVGPathElement | null>(null)
 const measureRef = ref<SVGTextElement | null>(null)
 const headRef = ref<SVGTextPathElement | null>(null)
@@ -186,9 +188,7 @@ const setupAnimation = () => {
 
   apply(0)
 
-  const prefersReduced =
-    typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  if (prefersReduced || props.speed <= 0) return
+  if (motionPaused.value || props.speed <= 0) return
 
   const state = { offset: 0 }
   const tween = gsap.to(state, {
@@ -223,7 +223,7 @@ onUnmounted(() => {
 })
 
 watch(
-  () => [metrics.value, props.speed, props.direction, props.pauseOnHover],
+  () => [metrics.value, props.speed, props.direction, props.pauseOnHover, motionPaused.value],
   () => {
     animTeardown?.()
     animTeardown = null

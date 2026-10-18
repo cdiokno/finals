@@ -1,6 +1,7 @@
 <!-- Adapted from Vue Bits: https://vue-bits.dev; see THIRD_PARTY_NOTICES.md. -->
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch, type CSSProperties } from 'vue'
+import { useMotionPaused } from '../../composables/useMotionPreference'
 
 const clamp = (v: number, a: number, b: number): number => (v < a ? a : v > b ? b : v)
 
@@ -53,6 +54,7 @@ const props = withDefaults(defineProps<ScrollExpandProps>(), {
 })
 
 const rootRef = ref<HTMLDivElement | null>(null)
+const motionPaused = useMotionPaused()
 const trackRef = ref<HTMLDivElement | null>(null)
 const stageRef = ref<HTMLDivElement | null>(null)
 const frameRef = ref<HTMLDivElement | null>(null)
@@ -108,7 +110,7 @@ const setup = () => {
   const stage = stageRef.value
   if (!root || !track || !stage) return
 
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reduceMotion = motionPaused.value
 
   let raf = 0
   let current = 0
@@ -203,7 +205,7 @@ onUnmounted(() => {
 })
 
 watch(
-  () => props.useWindowScroll,
+  () => [props.useWindowScroll, props.enabled, motionPaused.value],
   () => {
     teardown?.()
     teardown = null
