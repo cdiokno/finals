@@ -46,7 +46,6 @@ async function submit() {
 </script>
 <template>
   <section class="page-intro container">
-    <span class="section-kicker"><span></span> Let’s connect</span>
     <h2 class="section-title">Every possibility<br />starts with a hello.</h2>
     <p>
       A question about a program? Curious about life at CCS? We’d love to point you in the right
@@ -90,7 +89,7 @@ async function submit() {
     <div class="contact-form-panel">
       <template v-if="!submitted"
         ><div class="form-header">
-          <span class="form-illustration" aria-hidden="true">↗</span>
+          <span class="form-illustration" aria-hidden="true"><Icon name="arrow-up-right" :size="24" /></span>
           <h2>What’s on your mind?</h2>
           <p>Start your inquiry below.</p>
         </div>

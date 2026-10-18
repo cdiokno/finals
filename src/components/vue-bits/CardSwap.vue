@@ -22,17 +22,17 @@ function update() {
 function layout() {
   timeline?.kill()
   cards = Array.from(container.value.children)
-  const distance = Math.min(25, container.value.clientWidth * 0.065)
-  const slot = (index) => ({ x: index * distance, y: -index * distance, z: -index * 80 })
+  const distance = Math.min(28, container.value.clientWidth * 0.07)
+  const slot = (index) => ({ x: index * distance, y: -index * 47 })
   cards.forEach((card, index) => {
     gsap.set(card, {
-      ...slot(index), xPercent: -50, yPercent: -50, skewY: -5,
+      ...slot(index), xPercent: -50, yPercent: -50, skewY: 6,
       opacity: 1, rotation: 0, zIndex: cards.length - index, force3D: true,
     })
   })
   timeline = gsap.timeline({ paused: true, defaults: { ease: 'none' } })
   cards.forEach((card, index) => {
-    timeline.to(card, { y: container.value.clientHeight + 150, rotation: -8, duration: 0.85 }, index + 0.15)
+    timeline.to(card, { y: container.value.clientHeight + 180, duration: 0.85 }, index + 0.15)
     timeline.to(card, { opacity: 0, duration: 0.35 }, index + 0.65)
     cards.slice(index + 1).forEach((next, offset) => {
       timeline.to(next, { ...slot(offset), duration: 0.7 }, index + 0.3)
@@ -55,9 +55,9 @@ onUnmounted(() => { timeline?.kill(); observer?.disconnect() })
 </template>
 
 <style scoped>
-.card-swap { position: relative; width: 100%; height: 100%; perspective: 1000px; }
+.card-swap { position: relative; width: 100%; height: 100%; }
 .card-swap :deep(.deck-card) {
   position: absolute; top: 50%; left: 50%; width: 100%; height: 100%;
-  transform-style: preserve-3d; backface-visibility: hidden; will-change: transform, opacity;
+  backface-visibility: hidden; will-change: transform, opacity;
 }
 </style>

@@ -27,7 +27,6 @@ const milestones = [
 <template>
   <section class="container about-hero">
     <div>
-      <span class="section-kicker"><span></span> This is CCS</span>
       <h2 class="section-title">Different people.<br />One shared possibility.</h2>
       <p>
         At Central Philippine University, we bring technology, creativity, and Christian values

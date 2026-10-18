@@ -16,7 +16,15 @@ async function checkCollege(page, base = new URL('/#/', page.url()).href) {
   check(await page.locator('.program-chapter').count() === 4, 'All four open program chapters are inline')
   check((await page.locator('.program-chapter').evaluateAll(nodes => nodes.map(n => n.id))).join(',') === 'program-bscs,program-bsit,program-bsdmia,program-blis', 'Program order is CS, IT, DMIA, BLIS')
   check(await page.locator('.inline-story').count() === 3, 'All three full stories are inline')
-  check(await page.locator('.faculty-card').count() === 17, 'All grouped faculty are on the homepage')
+  check(await page.locator('.faculty-card').count() === 19, 'All grouped faculty are on the homepage')
+  check((await page.locator('.island-brand').innerText()).trim() === 'CCS', 'Brand has no trailing dot')
+  check(await page.locator('.deck-caption, .deck-jumpnav, .program-chapter-nav, .archive-notice, #faculty .page-intro .section-kicker, #news .page-intro .section-kicker, #contact .page-intro .section-kicker').count() === 0, 'Marked labels and duplicate links are removed')
+  check(await page.locator('.deck-card').evaluateAll(cards => cards.every(card => getComputedStyle(card).backgroundColor === 'rgb(24, 40, 80)' && getComputedStyle(card).color === 'rgb(255, 255, 255)')), 'All hero cards use the college navy with white text')
+  for (const name of ['Rea P. Balontong', 'Gleason B. Baylon', 'Rodlofo C. Eregia, Jr.', 'Antonio M. Montaño, Jr.']) {
+    check(await page.locator('#program-bscs .inline-teacher-list').getByText(name, { exact: true }).count() === 1, `${name} is listed under Computer Science`)
+  }
+  check(await page.locator('#program-bsdmia .inline-teacher-list').getByText('Antonio M. Montaño, Jr.', { exact: true }).count() === 0, 'Antonio Montaño is removed from DMIA')
+  check(await page.locator('.form-illustration svg').count() === 1, 'Contact illustration uses a vector icon')
   check(await page.locator('#contact form').count() === 1, 'Contact form is on the homepage')
   check(await page.locator('.island-header').evaluate(el => getComputedStyle(el).position) === 'fixed', 'Island stays fixed')
 
@@ -28,7 +36,7 @@ async function checkCollege(page, base = new URL('/#/', page.url()).href) {
   await page.waitForFunction(() => document.querySelector('#home').dataset.pinned === 'true')
   for (const [position, count] of [[0, 4], [510, 3], [1010, 2], [1510, 1], [2000, 0], [1010, 2], [0, 4]]) {
     await page.evaluate(top => window.scrollTo({ top, behavior: 'instant' }), position)
-    await page.waitForFunction(expected => Number(document.querySelector('[data-card-count]').textContent) === expected, count)
+    await page.waitForFunction(expected => Number(document.querySelector('.deck-stage').dataset.cardsRemaining) === expected, count)
     check(await page.locator('.deck-card:not([inert])').count() === (count ? 1 : 0), `Only the front card is interactive at count ${count}`)
   }
   await page.evaluate(() => window.scrollTo({ top: 2100, behavior: 'instant' }))
@@ -72,8 +80,9 @@ async function checkCollege(page, base = new URL('/#/', page.url()).href) {
   const nav = page.locator('.island-nav')
   await nav.getByRole('link', { name: 'Programs', exact: true }).click()
   await page.waitForFunction(() => document.querySelector('.island-header').dataset.currentSection === 'programs')
+  await page.waitForFunction(() => Math.abs(document.querySelector('#programs').getBoundingClientRect().top - 110) < 5)
   check(page.url().includes('#/#programs'), 'Island link navigates within the homepage')
-  await page.locator('.program-chapter-nav').getByRole('link', { name: 'BSIT', exact: true }).click()
+  await page.locator('.footer-columns').getByRole('link', { name: 'Information Technology', exact: true }).click()
   await page.waitForFunction(() => Math.abs(document.querySelector('#program-bsit').getBoundingClientRect().top - 110) < 5)
   check(await page.locator('#program-bsit').getByText('Bachelor of Science in Information Technology', { exact: true }).first().isVisible(), 'Program link opens complete inline degree information')
   await page.locator('#program-bsit').getByRole('link', { name: 'Ask about BSIT' }).click()

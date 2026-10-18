@@ -52,7 +52,6 @@ function resetFilters() {
 </script>
 <template>
   <section class="page-intro container">
-    <span class="section-kicker"><span></span> Faculty & staff</span>
     <h2 class="section-title">Good people.<br />Great possibilities.</h2>
     <p>
       Meet the educators, mentors, and staff who make the College of Computer Studies a place to
@@ -97,8 +96,8 @@ function resetFilters() {
       <button class="button button-navy" @click="resetFilters">Reset filters</button>
     </div>
     <p class="source-note">
-      Names, roles, and assignments follow the supplied CCS organizational chart. Faculty shared by
-      BSCS and BSDMIA appear in both groups.
+      Names and roles follow the supplied CCS organizational chart. Faculty with more than one
+      program appear in each relevant group.
       <RouterLink to="/credits">About our sources</RouterLink>
     </p>
   </section>

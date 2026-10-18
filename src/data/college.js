@@ -138,7 +138,7 @@ export const programs = [
     symbol: 'Aa',
   },
 ]
-// Program assignments and names follow context/ccs-org chart.md; specialties are not inferred.
+// Names and roles follow the supplied chart; program associations include the requested corrections.
 export const faculty = [
   {
     id: 'quijano',
@@ -179,7 +179,7 @@ export const faculty = [
     name: 'Rodlofo C. Eregia, Jr.',
     credentials: 'MSCS',
     role: 'Faculty · Outreach Coordinator',
-    programs: ['bsit'],
+    programs: ['bsit', 'bscs'],
     photo: 'eregia-754x1024.webp',
   },
   {
@@ -187,7 +187,7 @@ export const faculty = [
     name: 'Rea P. Balontong',
     credentials: 'MBA, MSCS',
     role: 'Faculty',
-    programs: ['bsit'],
+    programs: ['bsit', 'bscs'],
     photo: 'balontong-754x1024.webp',
   },
   {
@@ -195,7 +195,7 @@ export const faculty = [
     name: 'Gleason B. Baylon',
     credentials: 'MSCS',
     role: 'Faculty',
-    programs: ['bsit'],
+    programs: ['bsit', 'bscs'],
     photo: null,
   },
   {
@@ -219,7 +219,7 @@ export const faculty = [
     name: 'Antonio M. Montaño, Jr.',
     credentials: 'MSCS',
     role: 'Faculty',
-    programs: ['bscs', 'bsdmia'],
+    programs: ['bscs'],
     photo: 'montano-754x1024.webp',
   },
   {

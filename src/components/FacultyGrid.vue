@@ -68,7 +68,7 @@ async function showProfile(index) {
           /></RouterLink>
         </div>
         <p class="source-note">
-          Role and program association are based on the supplied college organizational chart.
+          Role is based on the supplied college organizational chart.
         </p>
         <RouterLink to="/contact" class="button button-navy" @click="dialog.close()"
           >Contact the college <Icon name="arrow-up-right" :size="17"

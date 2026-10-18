@@ -20,7 +20,7 @@ async function checkProgramMedia(page, base = new URL('/#/', page.url()).href) {
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: width === 1440 ? 1000 : 900 })
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
-    await page.waitForFunction(() => document.querySelector('[data-card-count]').textContent === '4')
+    await page.waitForFunction(() => document.querySelector('.deck-stage').dataset.cardsRemaining === '4')
     await page.screenshot({ path: `output/playwright/journey-home-${width}.png`, animations: 'disabled' })
     for (const id of ['bscs', 'bsit', 'bsdmia', 'blis']) {
       await jump(`program-${id}`)
@@ -36,7 +36,7 @@ async function checkProgramMedia(page, base = new URL('/#/', page.url()).href) {
   await page.setViewportSize({ width: 1440, height: 600 })
   await page.goto(base)
   await page.waitForFunction(() => document.querySelector('#home')?.dataset.pinned === 'false').catch(() => { throw new Error('Short viewport did not release intro') })
-  check(await page.locator('.deck-jumpnav a').count() === 4, 'Short viewports retain all four program links')
+  check(await page.locator('.footer-columns a[href^="#/programs/"]').count() === 4, 'Short viewports retain all four program links in the footer')
 
   await page.setViewportSize({ width: 1440, height: 1000 })
   await page.route('**/models/robot-expressive.glb', route => route.abort())

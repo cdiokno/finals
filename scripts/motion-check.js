@@ -45,7 +45,7 @@ async function checkMotion(page, base = new URL('/#/', page.url()).href) {
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
       await page.waitForFunction(() => document.querySelector('#home')?.dataset.pinned === 'true')
       await page.evaluate(() => window.scrollTo({ top: 510, behavior: 'instant' }))
-      await page.waitForFunction(() => document.querySelector('[data-card-count]').textContent === '3')
+      await page.waitForFunction(() => document.querySelector('.deck-stage').dataset.cardsRemaining === '3')
     }
     await jump('#program-bscs')
     await page.locator('.chapter-glitch canvas').waitFor()

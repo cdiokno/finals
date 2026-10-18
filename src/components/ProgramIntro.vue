@@ -3,7 +3,6 @@ import { computed, inject, onMounted, onUnmounted, ref, watch } from 'vue'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import CardSwap from './vue-bits/CardSwap.vue'
-import ProgramArt from './ProgramArt.vue'
 import Icon from './Icon.vue'
 import { imagePath } from '../data/college'
 
@@ -35,27 +34,22 @@ function setup() {
   const gridContent = stacked ? heights.reduce((sum, height) => sum + height, 0) + (parseFloat(gridStyle.rowGap) || 0) : Math.max(...heights)
   const contentsHeight = gridContent + parseFloat(gridStyle.paddingTop) + parseFloat(gridStyle.paddingBottom) + bottom.offsetHeight + parseFloat(getComputedStyle(hero.value).paddingTop)
   const canPin = !motionPaused.value && contentsHeight <= window.innerHeight + 2
-  if (trigger && canPin) { trigger.refresh(); return }
-  if (!canPin) {
-    const wasPinned = !!trigger
-    trigger?.kill(true)
-    trigger = null
-    pinned.value = false
-    progress.value = 0
-    if (wasPinned) refreshScrollEffects()
-    return
-  }
+  if (trigger && !motionPaused.value && pinned.value === canPin) { trigger.refresh(); return }
+  trigger?.kill(true)
+  trigger = null
+  pinned.value = canPin
+  progress.value = 0
+  if (motionPaused.value) { refreshScrollEffects(); return }
   // Short viewports use ordinary page scrolling so the headline and links stay reachable.
   trigger = ScrollTrigger.create({
-    trigger: hero.value,
-    start: 'top top',
-    end: () => `+=${window.innerHeight * 2}`,
-    pin: true,
+    trigger: canPin ? hero.value : hero.value.querySelector('.deck-stage'),
+    start: canPin ? 'top top' : 'top 38%',
+    end: canPin ? () => `+=${window.innerHeight * 2}` : 'bottom top',
+    pin: canPin,
     anticipatePin: 1,
     invalidateOnRefresh: true,
     onUpdate: (self) => { progress.value = self.progress },
   })
-  pinned.value = true
   refreshScrollEffects()
 }
 
@@ -87,8 +81,7 @@ onUnmounted(() => {
   <section id="home" ref="hero" data-scroll-section class="hero-section journey-intro" :data-pinned="pinned">
     <div class="container hero-grid">
       <div class="hero-copy">
-        <div class="location-label"><span class="live-dot"></span> Iloilo roots. Limitless possibilities.</div>
-        <h1>Think big.<br />Build <span class="hero-word">what’s next.<svg viewBox="0 0 550 30" aria-hidden="true"><path d="M4 19Q260-7 541 10M27 28Q300 9 519 19" /></svg></span></h1>
+        <h1>Think big.<br />Build <span class="hero-word">what’s next.</span></h1>
         <p>A home for curious minds, creative thinkers, and future builders. Find your place at CPU’s College of Computer Studies.</p>
         <div class="hero-actions">
           <RouterLink to="/programs" class="button button-navy">Find your program <Icon name="arrow-up-right" /></RouterLink>
@@ -100,18 +93,15 @@ onUnmounted(() => {
         </div>
       </div>
       <div class="program-deck">
-        <div class="deck-caption"><span>Find your direction</span><span aria-live="polite" aria-atomic="true"><strong data-card-count>{{ remaining }}</strong> paths to explore</span></div>
-        <div class="deck-stage">
+        <div class="deck-stage" :data-cards-remaining="remaining">
           <div v-if="remaining === 0" class="deck-finish"><Icon name="arrow-down" :size="36" /><p>Your next chapter<br />starts here.</p></div>
           <CardSwap :progress="progress">
-            <div v-for="p in programs" :key="p.id" class="deck-card" :class="p.theme">
-              <div class="deck-card-top"><span>{{ p.code }}</span><img :src="imagePath(p.logo)" :alt="p.org" width="38" height="38" /></div>
-              <ProgramArt :program="p" />
-              <div class="deck-card-copy"><h2>{{ p.name }}</h2><p>{{ p.short }}</p><RouterLink :to="`/programs/${p.id}`" class="text-link">Meet {{ p.code }} <Icon name="arrow-up-right" :size="18" /></RouterLink></div>
+            <div v-for="p in programs" :key="p.id" class="deck-card">
+              <div class="deck-card-top"><Icon :name="p.icon" :size="20" /><span>{{ p.code }}</span></div>
+              <div class="deck-card-copy"><h2>{{ p.name }}</h2><RouterLink :to="`/programs/${p.id}`" class="text-link">Explore program <Icon name="arrow-up-right" :size="18" /></RouterLink></div>
             </div>
           </CardSwap>
         </div>
-        <nav class="deck-jumpnav" aria-label="Jump to a program"><RouterLink v-for="p in programs" :key="p.id" :to="`/programs/${p.id}`">{{ p.code }}<Icon name="arrow-up-right" :size="12" /></RouterLink></nav>
       </div>
     </div>
     <div class="container hero-bottom"><span>{{ pinned ? 'Scroll to explore the four possibilities.' : 'Four paths. One Centralian community.' }}</span><RouterLink to="/programs">Your next chapter, this way <Icon name="arrow-down" :size="15" /></RouterLink></div>

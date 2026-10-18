@@ -4,8 +4,10 @@ import { useRoute } from 'vue-router'
 import SiteHeader from './components/SiteHeader.vue'
 import SiteFooter from './components/SiteFooter.vue'
 import { useMotionPreference } from './composables/useMotionPreference'
+import { useScrollMotion } from './composables/useScrollMotion'
 const route = useRoute()
 const motionPaused = useMotionPreference()
+useScrollMotion(motionPaused)
 provide('motionPaused', motionPaused)
 watch(motionPaused, (value) => document.documentElement.classList.toggle('motion-paused', value), {
   immediate: true,

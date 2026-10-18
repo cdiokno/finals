@@ -20,22 +20,12 @@ function resetFilters() {
 </script>
 <template>
   <section class="page-intro container">
-    <span class="section-kicker"><span></span> News, events & announcements</span>
     <h2 class="section-title">Stories worth<br />sharing.</h2>
     <p>
       Connections made. Milestones reached. A look at the people and moments shaping our community.
     </p>
   </section>
   <section class="container section-bottom">
-    <div class="archive-notice">
-      <Icon name="book" :size="20" />
-      <p>
-        From the CCS archive. These published stories retain their original dates.
-        <a href="https://cpu.edu.ph/news/" target="_blank" rel="noopener noreferrer"
-          >Visit CPU for current updates <Icon name="external" :size="14"
-        /></a>
-      </p>
-    </div>
     <div class="directory-controls">
       <div class="filter-row" aria-label="Filter stories by category">
         <button

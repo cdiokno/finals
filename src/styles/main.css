@@ -314,19 +314,6 @@ button:disabled {
 .hero-word {
   position: relative;
 }
-.hero-word > svg {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  bottom: -15px;
-  height: 25px;
-  overflow: visible;
-  fill: none;
-  stroke: var(--yellow);
-  stroke-width: 7;
-  stroke-linecap: round;
-  z-index: -1;
-}
 .hero-copy > p {
   max-width: 390px;
   font-size: 14px;
@@ -971,6 +958,7 @@ button:disabled {
   background: var(--navy);
   color: white;
   padding-top: 74px;
+  overflow: clip;
 }
 .footer-invitation {
   display: flex;
@@ -1668,31 +1656,6 @@ button:disabled {
   color: var(--navy);
 }
 /* News and articles */
-.archive-notice {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 17px 20px;
-  background: #f6f7fb;
-  border-radius: 10px;
-  margin-bottom: 25px;
-}
-.archive-notice svg {
-  margin-top: 2px;
-}
-.archive-notice p {
-  font-size: 12px;
-  color: var(--muted);
-}
-.archive-notice a {
-  color: var(--navy);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.archive-notice a svg {
-  display: inline;
-  vertical-align: middle;
-}
 .article-page {
   padding-block: 45px 100px;
 }
@@ -1812,6 +1775,8 @@ button:disabled {
 }
 .form-header {
   position: relative;
+  padding-right: 60px;
+  min-height: 45px;
 }
 .form-header h2 {
   font-size: 28px;
@@ -1831,7 +1796,6 @@ button:disabled {
   width: 45px;
   height: 45px;
   border-radius: 50%;
-  font-size: 30px;
   background: var(--yellow);
 }
 .demo-note {
@@ -2366,7 +2330,6 @@ button:disabled {
     width: 34px;
     height: 34px;
     right: 0;
-    font-size: 25px;
   }
   .contact-method strong {
     font-size: 13px;
@@ -2923,15 +2886,6 @@ button:disabled {
   .dean-panel h2 {
     font-size: 35px;
   }
-  .archive-notice {
-    padding: 15px;
-  }
-  .archive-notice p {
-    font-size: 11px;
-  }
-  .archive-notice > svg {
-    width: 17px;
-  }
   .article-header {
     margin-block: 35px 25px;
     text-align: left;
@@ -3045,9 +2999,6 @@ button:disabled {
   .footer-invitation h2 {
     font-size: 28px;
   }
-  .form-illustration {
-    display: none;
-  }
 }
 @media (min-width: 601px) and (max-width: 900px) {
   .hero-copy h1 {
@@ -3152,9 +3103,6 @@ button:disabled {
   width: 27px;
   height: 27px;
   object-fit: contain;
-}
-.island-brand-dot {
-  color: var(--yellow);
 }
 .island-nav {
   display: flex;

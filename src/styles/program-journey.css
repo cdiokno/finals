@@ -18,25 +18,17 @@
 .journey-intro .hero-copy h1 { white-space: normal; font-size: clamp(48px, 5.25vw, 76px); }
 .journey-intro .hero-word { display: inline-block; white-space: nowrap; }
 .journey-intro .hero-bottom { min-height: 64px; flex-shrink: 0; }
-.program-deck { min-width: 0; padding: 15px 38px 0 0; }
-.deck-caption { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--muted); margin-bottom: 80px; }
-.deck-caption > span:first-child { font-weight: 700; }
-.deck-caption strong { font-family: 'Space Grotesk', sans-serif; color: var(--navy); font-size: 18px; margin-right: 4px; }
-.deck-stage { position: relative; width: min(100%, 390px); height: 365px; margin: 0 auto; }
-.deck-card { border: 1px solid rgb(24 40 80 / 0.18); border-radius: 20px; padding: 24px; box-shadow: 0 22px 50px -35px rgb(24 40 80 / 0.55); }
-.deck-card-top { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 800; }
-.deck-card-top img { object-fit: contain; }
-.deck-card .program-art { height: 118px; margin: 0; transform: scale(0.72); transform-origin: center; }
-.deck-card h2 { font-size: 29px; line-height: 1.07; letter-spacing: -1.2px; }
-.deck-card p { margin-top: 10px; font-size: 11px; line-height: 1.65; max-width: 290px; color: #44526d; }
-.deck-card .text-link { font-size: 11px; margin-top: 14px; }
-.deck-jumpnav { display: flex; justify-content: center; flex-wrap: wrap; gap: 18px; margin-top: 38px; font-size: 10px; font-weight: 700; }
-.deck-jumpnav a { display: flex; align-items: center; gap: 4px; min-height: 32px; }
+.program-deck { min-width: 0; padding: 160px 72px 25px 0; }
+.deck-stage { position: relative; width: min(100%, 370px); height: 290px; margin: 0 auto; }
+.deck-card { background: var(--navy); color: #fff; border: 1px solid rgb(255 255 255 / 0.6); border-radius: 14px; overflow: hidden; }
+.deck-card-top { min-height: 47px; display: flex; align-items: center; gap: 10px; padding: 12px 22px; border-bottom: 1px solid rgb(255 255 255 / 0.6); font-size: 12px; font-weight: 600; }
+.deck-card-copy { height: calc(100% - 47px); padding: 28px; display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-end; gap: 24px; }
+.deck-card h2 { max-width: 290px; font-size: 36px; line-height: 1.08; letter-spacing: -1.5px; }
+.deck-card .text-link { font-size: 11px; }
 .deck-finish { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 25px; }
 .deck-finish p { font-family: 'Space Grotesk', sans-serif; font-size: 36px; line-height: 1.15; letter-spacing: -1.2px; text-align: center; }
-.program-chapter-nav { min-height: 94px; display: flex; align-items: center; gap: 32px; font-size: 12px; font-weight: 700; }
-.program-chapter-nav > span { margin-right: auto; font-family: 'Space Grotesk', sans-serif; font-size: 21px; letter-spacing: -0.6px; }
-.program-chapter-nav > a { display: flex; align-items: center; gap: 8px; min-height: 44px; }
+.program-chapter-heading { min-height: 94px; display: flex; align-items: center; padding-block: 22px; }
+.program-chapter-heading h2 { font-family: 'Space Grotesk', sans-serif; font-size: 21px; letter-spacing: -0.6px; }
 .program-chapter, .chapter-info { scroll-margin-top: 110px; }
 .chapter-hero { position: relative; isolation: isolate; min-height: 660px; overflow: hidden; display: flex; flex-direction: column; }
 .chapter-hero-grid { position: relative; z-index: 1; flex: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 70px; align-items: center; padding-block: 90px 75px; }
@@ -90,15 +82,11 @@
   .journey-intro .hero-grid { min-height: 0; padding-block: 25px 10px; }
   .journey-intro .hero-copy h1 { font-size: clamp(48px, 5.5vw, 74px); }
   .journey-intro .hero-community { margin-top: 25px; }
-  .deck-caption { margin-bottom: 65px; }
-  .deck-stage { height: 345px; max-width: 365px; }
-  .deck-card .program-art { height: 100px; }
-  .deck-jumpnav { margin-top: 25px; }
+  .deck-stage { height: 265px; max-width: 350px; }
 }
 @media (max-width: 1150px) {
   .journey-intro .hero-grid { gap: 48px; }
-  .deck-card { padding: 20px; }
-  .deck-card h2 { font-size: 26px; }
+  .deck-card h2 { font-size: 32px; }
   .chapter-hero-grid { gap: 35px; }
 }
 @media (max-width: 900px) {
@@ -107,16 +95,10 @@
   .journey-intro .hero-copy > p { font-size: 12px; }
   .journey-intro .hero-community { display: none; }
   .journey-intro .hero-actions { flex-wrap: wrap; gap: 18px; }
-  .program-deck { padding-right: 20px; }
-  .deck-caption { flex-wrap: wrap; margin-bottom: 60px; font-size: 10px; }
-  .deck-stage { height: 330px; }
-  .deck-card { padding: 17px; }
-  .deck-card h2 { font-size: 23px; }
-  .deck-card .program-art { height: 105px; transform: scale(0.6); }
-  .deck-card p { font-size: 10px; }
-  .deck-jumpnav { gap: 10px; margin-top: 25px; font-size: 9px; }
-  .program-chapter-nav { gap: 22px; flex-wrap: wrap; padding-block: 22px; }
-  .program-chapter-nav > span { flex-basis: 100%; }
+  .program-deck { padding-right: 48px; }
+  .deck-stage { height: 260px; }
+  .deck-card-copy { padding: 22px; }
+  .deck-card h2 { font-size: 29px; }
   .chapter-hero-grid { padding-block: 65px; gap: 25px; }
   .chapter-hero { min-height: 600px; }
   .chapter-copy h2 { font-size: 50px; letter-spacing: -2.5px; }
@@ -135,23 +117,17 @@
   .journey-intro .hero-actions { margin-top: 22px; gap: 18px; }
   .journey-intro .hero-actions .button { font-size: 11px; min-height: 44px; padding: 10px 14px; }
   .journey-intro .hero-actions .text-link { font-size: 10px; gap: 6px; }
-  .program-deck { max-width: 420px; width: 100%; margin-inline: auto; padding: 0 21px 0 0; }
-  .deck-caption { flex-wrap: nowrap; margin-bottom: 60px; }
-  .deck-stage { max-width: 330px; height: 310px; }
-  .deck-card { padding: 20px; }
-  .deck-card-top { font-size: 10px; }
-  .deck-card-top img { width: 30px; height: 30px; }
-  .deck-card .program-art { height: 94px; transform: scale(0.6); margin-inline: 0; }
-  .deck-card h2 { font-size: 25px; }
-  .deck-card p { font-size: 10px; margin-top: 9px; }
-  .deck-card .text-link { font-size: 10px; margin-top: 12px; }
-  .deck-jumpnav { gap: 16px; }
+  .program-deck { max-width: 420px; width: 100%; margin-inline: auto; padding: 150px 48px 20px 0; }
+  .deck-stage { max-width: 330px; height: 250px; }
+  .deck-card-top { font-size: 11px; padding-inline: 18px; }
+  .deck-card-copy { padding: 22px; gap: 22px; }
+  .deck-card h2 { font-size: 30px; }
+  .deck-card .text-link { font-size: 10px; }
   .journey-intro .hero-bottom { gap: 16px; align-items: flex-start; padding-block: 20px; font-size: 9px; min-height: 65px; }
   .journey-intro .hero-bottom > span { max-width: 140px; }
   .journey-intro .hero-bottom > a { max-width: 150px; text-align: right; }
-  .program-chapter-nav { gap: 14px; font-size: 10px; min-height: 100px; }
-  .program-chapter-nav > span { font-size: 20px; }
-  .program-chapter-nav > a { gap: 4px; }
+  .program-chapter-heading { min-height: 100px; }
+  .program-chapter-heading h2 { font-size: 20px; }
   .chapter-hero { min-height: 630px; }
   .chapter-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; padding-block: 55px 35px; }
   .chapter-label { margin-bottom: 26px; font-size: 11px; }
@@ -179,5 +155,69 @@
   .program-journey > .program-helper { margin-bottom: 45px; }
 }
 @media (hover: hover) and (pointer: fine) {
-  .deck-jumpnav a:hover, .program-chapter-nav a:hover { color: #536aab; }
+  .deck-card .text-link:hover { color: var(--yellow); }
+}
+
+/* Each chapter holds one viewport while its program wheel advances. */
+.chapter-runway { height: 300svh; position: relative; }
+.chapter-runway-long { height: 500svh; }
+.chapter-runway .chapter-hero { position: sticky; top: 0; height: 100svh; min-height: 0; }
+.chapter-runway .chapter-hero-grid { min-height: 0; padding-block: 115px 24px; }
+.chapter-runway .chapter-label { margin-bottom: 20px; }
+.chapter-runway .chapter-copy h2 { font-size: clamp(40px, 5vw, 72px); }
+.program-wheel { margin-top: 24px; max-width: 540px; }
+.program-wheel-options { display: flex; gap: 14px; border-bottom: 1px solid currentColor; padding-bottom: 12px; }
+.program-wheel-options button { background: none; color: inherit; border: 0; padding: 4px 0; font: inherit; font-size: 11px; text-align: left; cursor: pointer; opacity: 0.5; min-height: 44px; }
+.program-wheel-options button span { display: block; font-size: 9px; margin-bottom: 4px; }
+.program-wheel-options button.is-selected { opacity: 1; font-weight: 700; }
+.program-wheel-options button:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.program-wheel-window { height: 112px; perspective: 650px; overflow: hidden; }
+.program-wheel-drum { position: relative; height: 100%; transform-style: preserve-3d; }
+.program-wheel-drum p { position: absolute; inset: 0; display: flex; align-items: center; margin: 0; font-size: 16px; line-height: 1.5; backface-visibility: hidden; }
+.chapter-runway .chapter-copy .button { margin-top: 12px; }
+.chapter-runway.is-paused { height: auto; }
+.chapter-runway.is-paused .chapter-hero { position: relative; min-height: 100svh; height: auto; }
+.chapter-runway.is-paused .program-wheel-drum { transform: none !important; }
+.chapter-runway.is-paused .program-wheel-drum p { transform: none !important; }
+.chapter-runway.is-paused .program-wheel-drum p[aria-hidden='true'] { visibility: hidden; }
+@media (max-width: 900px) {
+  .chapter-runway .chapter-copy h2 { font-size: clamp(32px, 5vw, 50px); }
+  .program-wheel-options { gap: 10px; }
+  .program-wheel-drum p { font-size: 14px; }
+}
+@media (max-width: 600px) {
+  .chapter-runway .chapter-hero-grid { padding-block: 100px 12px; gap: 0; align-content: center; }
+  .chapter-runway .chapter-label { margin-bottom: 12px; gap: 6px; }
+  .chapter-runway .chapter-label img { width: 26px; height: 26px; }
+  .chapter-runway .chapter-copy h2 { font-size: clamp(29px, 8vw, 43px); letter-spacing: -1.5px; }
+  .program-wheel { margin-top: 14px; }
+  .program-wheel-options { gap: 12px; padding-bottom: 6px; }
+  .program-wheel-options button { font-size: 10px; }
+  .program-wheel-window { height: 100px; }
+  .program-wheel-drum p { font-size: 13px; }
+  .chapter-runway .chapter-copy .button { margin-top: 4px; min-height: 40px; }
+  .chapter-runway .chapter-model, .chapter-runway .chapter-cubes { height: clamp(150px, 25svh, 240px); margin: 0; }
+  .chapter-runway .chapter-cubes > div { width: 48%; }
+  .chapter-runway .chapter-hero-bottom { min-height: 44px; padding-block: 10px; }
+}
+/* Let short screens and enlarged text flow instead of clipping controls. */
+@media (max-height: 740px) {
+  .chapter-runway { height: auto; }
+  .chapter-runway .chapter-hero { position: relative; height: auto; min-height: 100svh; }
+}
+
+/* Give the animation character the largest share of its chapter. */
+.chapter-bsdmia .chapter-hero-grid { container-type: inline-size; grid-template-columns: minmax(0, 0.85fr) minmax(0, 2fr); gap: 0; }
+.chapter-bsdmia .chapter-model { width: calc((100vw - 64px) * 2 / 2.85); justify-self: end; margin-right: calc(32px - (100vw - 100cqw) / 2); }
+.chapter-bsdmia .chapter-copy { position: relative; z-index: 1; }
+.chapter-runway .chapter-bsdmia .chapter-copy h2 { font-size: clamp(32px, 3.5vw, 54px); }
+.chapter-runway .chapter-bsdmia .chapter-model { height: calc(100svh - 220px); min-height: 460px; }
+@media (max-width: 600px) {
+  .chapter-bsdmia .chapter-hero-grid { grid-template-columns: minmax(0, 1fr); align-content: start; }
+  .chapter-bsdmia .chapter-model { width: auto; justify-self: stretch; }
+  .chapter-runway .chapter-bsdmia .chapter-copy h2 { font-size: clamp(26px, 7vw, 36px); }
+  .chapter-bsdmia .chapter-label { margin-bottom: 8px; }
+  .chapter-bsdmia .program-wheel { margin-top: 8px; }
+  .chapter-bsdmia .program-wheel-window { height: 76px; }
+  .chapter-runway .chapter-bsdmia .chapter-model { height: min(55svh, calc(100svh - 450px)); min-height: 280px; margin-inline: -20px; }
 }

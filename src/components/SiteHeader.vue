@@ -122,7 +122,7 @@ onUnmounted(() => {
         <span class="island-logo"
           ><img :src="imagePath('ccs-logo.png')" alt="" width="29" height="29"
         /></span>
-        <span>CCS<span class="island-brand-dot">.</span></span>
+        <span>CCS</span>
       </a>
       <nav class="island-nav" aria-label="Main navigation">
         <span

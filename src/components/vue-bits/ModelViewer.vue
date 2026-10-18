@@ -17,25 +17,20 @@
     </div>
 
     <TresCanvas
-      shadows
       :style="{ touchAction: 'pan-y pinch-zoom' }"
       :preserve-drawing-buffer="true"
       :tone-mapping="ACESFilmicToneMapping"
       :output-color-space="SRGBColorSpace"
       @ready="handleReady"
     >
-      <TresPerspectiveCamera :position="[0, 0, camZ]" :fov="50" :near="0.01" :far="100" />
+      <TresPerspectiveCamera :position="cameraPosition" :fov="50" :near="0.01" :far="100" />
 
       <Environment v-if="environmentPreset !== 'none'" :preset="scenePreset" :background="false" />
 
       <TresAmbientLight :intensity="ambientIntensity" />
-      <TresDirectionalLight :position="[5, 5, 5]" :intensity="keyLightIntensity" cast-shadow />
+      <TresDirectionalLight :position="[5, 5, 5]" :intensity="keyLightIntensity" />
       <TresDirectionalLight :position="[-5, 2, 5]" :intensity="fillLightIntensity" />
       <TresDirectionalLight :position="[0, 4, -5]" :intensity="rimLightIntensity" />
-
-      <TresGroup ref="contactGroupRef">
-        <ContactShadows :position="[0, -0.5, 0]" :opacity="0.35" :scale="10" :blur="2" />
-      </TresGroup>
 
       <ModelInner
         :url="url"
@@ -44,6 +39,8 @@
         :pivot="pivot"
         :init-yaw="initYaw"
         :init-pitch="initPitch"
+        :rotation="rotation"
+        :zoom="zoom"
         :min-zoom="minZoomDistance"
         :max-zoom="maxZoomDistance"
         :enable-mouse-parallax="enableMouseParallax"
@@ -70,14 +67,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, onBeforeUnmount, onMounted, shallowRef, useTemplateRef } from 'vue';
+import { computed, defineComponent, h, onBeforeUnmount, onMounted, shallowRef, useTemplateRef, type PropType } from 'vue';
 import * as THREE from 'three';
 import { ACESFilmicToneMapping, SRGBColorSpace } from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js';
 import { TresCanvas, useLoop, useTres } from '@tresjs/core';
-import { ContactShadows, Environment, OrbitControls, useFBX, useGLTF } from '@tresjs/cientos';
+import { Environment, OrbitControls, useFBX } from '@tresjs/cientos';
 
 export interface ModelViewerProps {
   url: string;
@@ -87,6 +84,9 @@ export interface ModelViewerProps {
   modelYOffset?: number;
   defaultRotationX?: number;
   defaultRotationY?: number;
+  /** Externally controlled Euler angles in radians. */
+  rotation?: [number, number, number];
+  zoom?: number;
   defaultZoom?: number;
   minZoomDistance?: number;
   maxZoomDistance?: number;
@@ -149,7 +149,6 @@ const FADE_SPEED = 3;
 const isTouch = typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
 
 const containerRef = useTemplateRef<HTMLDivElement>('containerRef');
-const contactGroupRef = useTemplateRef<THREE.Group>('contactGroupRef');
 
 const isLoaded = shallowRef(false);
 const pivot = new THREE.Vector3();
@@ -167,6 +166,8 @@ const containerStyle = computed(() => ({
 const initYaw = computed(() => deg2rad(props.defaultRotationX));
 const initPitch = computed(() => deg2rad(props.defaultRotationY));
 const camZ = computed(() => Math.min(Math.max(props.defaultZoom, props.minZoomDistance), props.maxZoomDistance));
+// Keep the prop stable so reactive poses do not overwrite the fitted camera.
+const cameraPosition = computed<[number, number, number]>(() => [0, 0, camZ.value]);
 
 // `none` is handled by the `v-if`; this narrows the type for the cientos <Environment> preset prop.
 const scenePreset = computed(() => props.environmentPreset as Exclude<ModelViewerProps['environmentPreset'], 'none'>);
@@ -194,29 +195,12 @@ const captureScreenshot = () => {
   const camera = tres.camera.value;
   if (!renderer || !scene || !camera) return;
 
-  renderer.shadowMap.enabled = false;
-  const restore: { light: THREE.Light; cast: boolean }[] = [];
-  scene.traverse((object: THREE.Object3D) => {
-    const light = object as THREE.Light;
-    if (light.isLight && 'castShadow' in light) {
-      restore.push({ light, cast: light.castShadow });
-      light.castShadow = false;
-    }
-  });
-
-  const contactGroup = contactGroupRef.value;
-  if (contactGroup) contactGroup.visible = false;
-
   renderer.render(scene, camera);
   const dataUrl = renderer.domElement.toDataURL('image/png');
   const anchor = document.createElement('a');
   anchor.download = 'model.png';
   anchor.href = dataUrl;
   anchor.click();
-
-  renderer.shadowMap.enabled = true;
-  restore.forEach(({ light, cast }) => (light.castShadow = cast));
-  if (contactGroup) contactGroup.visible = true;
 };
 
 /* -------------------------------------------------------------------------- */
@@ -232,6 +216,8 @@ const ModelInner = defineComponent({
     pivot: { type: Object as () => THREE.Vector3, required: true },
     initYaw: { type: Number, default: 0 },
     initPitch: { type: Number, default: 0 },
+    zoom: { type: Number, default: 1 },
+    rotation: { type: Array as PropType<[number, number, number]>, default: null },
     minZoom: { type: Number, default: 0.5 },
     maxZoom: { type: Number, default: 10 },
     enableMouseParallax: { type: Boolean, default: true },
@@ -296,8 +282,8 @@ const ModelInner = defineComponent({
       // outer group, and setFromObject() uses world-space bounds, so reset first.
       outer.position.set(0, 0, 0);
       outer.rotation.set(0, 0, 0);
-      outer.updateWorldMatrix(true, true);
-      group.updateWorldMatrix(true, true);
+      // SkinnedMesh updates its bind matrix in updateMatrixWorld, before bounds are measured.
+      outer.updateMatrixWorld(true);
       const sphere = new THREE.Box3().setFromObject(group).getBoundingSphere(new THREE.Sphere());
       const scale = 1 / (sphere.radius * 2);
       // Scale the translation as well as the model, keeping its visual center at the orbit pivot.
@@ -307,8 +293,6 @@ const ModelInner = defineComponent({
       group.traverse((object: THREE.Object3D) => {
         const mesh = object as THREE.Mesh;
         if (mesh.isMesh) {
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
           if (innerProps.fadeIn) {
             const material = mesh.material as THREE.Material | THREE.Material[];
             (Array.isArray(material) ? material : [material]).forEach(m => {
@@ -397,7 +381,7 @@ const ModelInner = defineComponent({
     /* Touch interaction: drag to rotate, pinch to zoom */
     const setupTouch = () => {
       const el = renderer.value?.domElement;
-      if (!el || !isTouch) return;
+      if (!el || !isTouch || (!innerProps.enableManualRotation && !innerProps.enableManualZoom)) return;
 
       const points = new Map<number, { x: number; y: number }>();
       type Mode = 'idle' | 'decide' | 'rotate' | 'pinch';
@@ -558,6 +542,16 @@ const ModelInner = defineComponent({
       ndc.x += innerProps.xOff + cPar.x;
       ndc.y += innerProps.yOff + cPar.y;
       outer.position.copy(ndc.unproject(cam));
+
+      const perspective = cam as THREE.PerspectiveCamera;
+      if (perspective.isPerspectiveCamera && perspective.zoom !== innerProps.zoom) {
+        perspective.zoom = innerProps.zoom;
+        perspective.updateProjectionMatrix();
+      }
+      if (innerProps.rotation) {
+        outer.rotation.set(...innerProps.rotation);
+        return;
+      }
 
       outer.rotation.x += cHov.x - prevHoverX;
       outer.rotation.y += cHov.y - prevHoverY;

@@ -24,10 +24,7 @@ const logos = computed(() =>
   <ProgramIntro :programs="orderedPrograms" />
 
   <section id="programs" data-scroll-section class="program-journey" aria-label="Our four degree programs">
-    <nav class="container program-chapter-nav" aria-label="Explore degree programs">
-      <span>Four paths. Find yours.</span>
-      <RouterLink v-for="p in orderedPrograms" :key="p.id" :to="`/programs/${p.id}`">{{ p.code }} <Icon name="arrow-up-right" :size="14" /></RouterLink>
-    </nav>
+    <div class="container program-chapter-heading"><h2>Four paths. Find yours.</h2></div>
     <article v-for="p in orderedPrograms" :id="`program-${p.id}`" :key="p.id" class="program-chapter" :aria-label="p.name">
       <ProgramHero :program="p" />
       <div :id="`program-${p.id}-details`" class="container chapter-info"><ProgramDetail :id="p.id" /></div>
